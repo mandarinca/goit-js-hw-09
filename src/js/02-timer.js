@@ -21,6 +21,7 @@ function newCloseDate(selectedDates, dateStr, instance) {
     instance.setDate(new Date());
   } else {
     startBtn.disabled = false;
+
     let timeDfrnc = selectedDates[0] - new Date();
 
     dataObj = convertMs(timeDfrnc);
@@ -33,10 +34,6 @@ const daysEl = document.querySelector('[data-days]');
 const hoursEl = document.querySelector('[data-hours]');
 const minutesEl = document.querySelector('[data-minutes]');
 const secondsEl = document.querySelector('[data-seconds]');
-console.log(daysEl);
-console.log(hoursEl);
-console.log(minutesEl);
-console.log(secondsEl);
 
 function setDatatoHTML(obj) {
   daysEl.textContent = obj.days;
@@ -50,32 +47,29 @@ let timer;
 startBtn.addEventListener('click', function () {
   startBtn.disabled = true;
   timer = setInterval(() => {
-    dataObj.seconds = addLeadingZero(dataObj.seconds - 1);
-
-    if (dataObj.seconds == '00') {
+    if (dataObj.seconds > 0) {
+      dataObj.seconds = addLeadingZero(dataObj.seconds - 1);
+    } else {
+      clearInterval(timer);
+      Notiflix.Notify.success('Time has come!!!   RUN!!!');
+    }
+    if (dataObj.minutes > 0 && dataObj.seconds == 0) {
       dataObj.minutes = addLeadingZero(dataObj.minutes - 1);
-      dataObj.seconds = '59';
+      dataObj.seconds = 59;
     }
-
-    if (dataObj.minutes == '00') {
+    if (dataObj.hours > 0 && dataObj.minutes == 0) {
       dataObj.hours = addLeadingZero(dataObj.hours - 1);
-      dataObj.minutes = '59';
+      dataObj.minutes = 59;
+    }
+    if (dataObj.days > 0 && dataObj.hours == 0) {
+      dataObj.days = addLeadingZero(dataObj.days - 1);
+      dataObj.hours = 23;
     }
 
-    if (dataObj.hours == '00') {
-      dataObj.days = addLeadingZero(dataObj.hours - 1);
-      dataObj.hours = '23';
-    }
-
-    if (dataObj == '00') {
-      stopTimer = clearInterval();
-    }
     setDatatoHTML(dataObj);
     console.log('tick');
   }, 1000);
 });
-// let deadLine = selectedDates[0];
-// let timerId = null;
 
 startBtn.disabled = true;
 
