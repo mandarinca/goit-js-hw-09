@@ -67,7 +67,6 @@ startBtn.addEventListener('click', function () {
     }
 
     setDatatoHTML(dataObj);
-    console.log('tick');
   }, 1000);
 });
 
